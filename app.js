@@ -19,22 +19,41 @@ class GroceryListItem extends React.Component {
 
   // When a list item is clicked, we will toggle the `done`
   // boolean, and our component's `render` method will run again
+
+  //Problem: hereyou are passing in an object for setState but relying on a previous state
   onListItemClick() {
-    this.setState({
-      done: !this.state.done,
-      hover: !this.state.hover
-    });
+    this.setState((prevState) => ({
+      done: true,
+      hover:!prevState.hover
+    }));
   }
+
+  //first option: pass in object for setState, all values must be explicitly declared
+  // instead of relying on previous state
+  // onListItemClick(){
+  //   this.setState({
+  //     done: true,
+  //     hover: true
+  //   })
+  // }
+
+  //second option: pass in function for setState,can use previous state here
+  // onListItemClick(){
+  //   this.setState((prevState) => ({
+  //   done: !prevState.state.done,
+  //   hover: !prevState.state.hover
+  //   }))
+  // }
 
   onMouseHover() {
     this.setState({
-      hover: !this.state.hover
+      hover: true
     });
   }
 
   onMouseOff() {
     this.setState({
-      hover: !this.state.hover
+      hover: false
     })
   }
 
@@ -45,7 +64,7 @@ class GroceryListItem extends React.Component {
     // update it based on user interactions.
     var style = {
       textDecoration: this.state.done ? 'line-through' : 'none',
-      fontWeight: this.state.hovering ? 'bold' : 'normal'
+      fontWeight: this.state.hover ? 'bold' : 'normal'
     };
 
     // You can pass inline styles using React's `style` attribute to any component
@@ -56,7 +75,7 @@ class GroceryListItem extends React.Component {
       <li
         style={style}
         onMouseOver={this.onMouseHover.bind(this)}
-        onMouseOff={this.onMouseOff.bind(this)}
+        onMouseOut={this.onMouseOff.bind(this)}
         onClick={this.onListItemClick.bind(this)}
       >
         {this.props.meat}
@@ -75,7 +94,7 @@ const GroceryList = (props) => {
 
   return (
     <ul>
-      {props.tacoMeats.map(meat =>
+      {props.tacoMeats.map((meat) =>
       <GroceryListItem meat={meat} />
       )}
     </ul>
@@ -83,8 +102,8 @@ const GroceryList = (props) => {
 };
 
 const App = () => (
-  <h1>Hello World</h1>
   <div>
+    <h1>Hello World</h1>
     <h2>Grocery List</h2>
     <GroceryList tacoMeats={['Carne Asada', 'Al Pastor', 'Carnitas', 'Pollo', 'Lengua', 'Chorizo']} />
   </div>
